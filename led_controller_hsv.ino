@@ -3,6 +3,7 @@
 #define RED_PIN 5 // PB0, hardware PWM
 #define GREEN_PIN 7 // PB1, hardware PWM
 #define BLUE_PIN 9 //PB2, software PWM
+#define POT_PIN A0
 
 #define NUM_LEDS 1  //num of LEDS (1 for the RGB strip)
 
@@ -17,6 +18,7 @@ void setup() {
   pinMode(RED_PIN, OUTPUT);
   pinMode(GREEN_PIN, OUTPUT);
   pinMode(BLUE_PIN, OUTPUT);
+  pinMode(POT_PIN, INPUT);
 
   // init software pwm on BLUE_PIN
   SoftPWMBegin();
@@ -28,13 +30,21 @@ void setup() {
 
 void loop() {
   Serial.begin(9600);
+  int potVal = analogRead(POT_PIN);
+  uint8_t hue = map(potVal, 0, 1023, 0, 255);
 
+  leds[0] = CHSV(hue, 255, 255);
+  applyColor();
+  delay(50);
+/*
   for (int i = 0; i <= 255; i++) {
     fadeIn(i);
     delay(DURATION);
     Serial.println("HSV Value: " + String(i));
+
+    
   }
-  
+  */
   //fadeOut(hue);
   //delay(DURATION);
 
